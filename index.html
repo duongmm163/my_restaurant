@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResPro v3.3 - GitHub Deploy Ready</title>
+    <title>ResPro v3.3 - Production Build</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -43,14 +43,14 @@
 
 <div id="app" class="max-w-7xl mx-auto h-screen shadow-2xl bg-white flex flex-col relative overflow-hidden">
     
-    <!-- MÀN HÌNH ĐĂNG NHẬP -->
+    <!-- LOGIN SCREEN -->
     <div id="login-screen" class="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-900 transition-all duration-700">
         <div class="bg-white p-10 rounded-[3rem] shadow-2xl w-full max-w-sm text-center">
             <div class="w-20 h-20 bg-indigo-600 rounded-3xl mx-auto flex items-center justify-center mb-6 shadow-xl text-white">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
             <h1 class="text-2xl font-black mb-1 text-slate-800">RESTAURANT <span class="text-indigo-600">PRO</span></h1>
-            <p class="text-slate-400 text-[10px] mb-8 font-bold uppercase tracking-widest">Version 3.3 - Deploy Ready</p>
+            <p class="text-slate-400 text-[10px] mb-8 font-bold uppercase tracking-widest">Build 3.3.1 - Production</p>
             
             <input type="password" id="pin-input" maxlength="6" class="w-full text-center text-3xl p-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-indigo-600 outline-none mb-4 tracking-[0.5em] font-black" placeholder="••••••">
             <button onclick="handleLogin()" class="w-full bg-indigo-600 text-white font-black py-4 rounded-2xl shadow-lg active-scale hover:bg-indigo-700 transition-all">ĐĂNG NHẬP</button>
@@ -76,12 +76,9 @@
                 </div>
             </div>
         </div>
-        
-        <div class="flex gap-2">
-            <button onclick="logout()" class="p-3 bg-red-50 rounded-xl text-red-400 hover:text-red-600 active-scale">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-            </button>
-        </div>
+        <button onclick="logout()" class="p-3 bg-red-50 rounded-xl text-red-400 hover:text-red-600 active-scale">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        </button>
     </header>
 
     <!-- ADMIN STATS -->
@@ -106,17 +103,13 @@
             <div class="spinner mb-4"></div>
             <p class="text-xs font-black text-slate-400 uppercase tracking-widest">Đang kết nối hệ thống...</p>
         </div>
-        
         <div class="mb-6 flex justify-between items-end">
             <div>
                 <h3 class="text-xl font-black text-slate-800 tracking-tight">Sơ đồ bàn</h3>
                 <p id="online-status" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Đang kiểm tra...</p>
             </div>
-            <div class="text-right">
-                <p id="date-display" class="text-xs font-black text-slate-800">--/--/----</p>
-            </div>
+            <div class="text-right"><p id="date-display" class="text-xs font-black text-slate-800">--/--/----</p></div>
         </div>
-
         <div id="table-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 pb-10"></div>
     </main>
 
@@ -132,52 +125,37 @@
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <!-- Nút mở khóa chỉ hiện cho Admin khi bàn đang pending-pay -->
-                    <button id="btn-unlock" onclick="unlockTable()" class="admin-only px-4 h-12 bg-amber-500 text-white rounded-2xl font-black text-[10px] hidden active-scale uppercase tracking-widest shadow-lg shadow-amber-200">Mở khóa Order</button>
+                    <button id="btn-unlock" onclick="unlockTable()" class="admin-only px-4 h-12 bg-amber-500 text-white rounded-2xl font-black text-[10px] hidden active-scale uppercase tracking-widest shadow-lg">Mở khóa Order</button>
                     <button onclick="closeModal()" class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>
             </div>
-            
             <div class="flex-1 flex overflow-hidden">
-                <!-- Menu side -->
-                <div class="flex-1 flex flex-col overflow-hidden bg-slate-50 relative" id="menu-side-container">
+                <div class="flex-1 flex flex-col overflow-hidden bg-slate-50 relative">
                     <div id="lock-overlay" class="locked-overlay hidden">
                         <div class="text-center">
-                            <div class="w-16 h-16 bg-amber-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            </div>
+                            <div class="w-16 h-16 bg-amber-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2.5"/></svg></div>
                             <p class="font-black text-amber-600 uppercase tracking-widest text-sm">Bàn đang chờ thanh toán</p>
-                            <p class="text-[10px] text-slate-400 font-bold">Vui lòng hoàn tất hóa đơn hoặc nhờ Quản lý mở khóa</p>
                         </div>
                     </div>
                     <div class="p-4 flex gap-2 overflow-x-auto no-scrollbar" id="menu-tabs">
-                        <button onclick="filterMenu('All')" class="tab-btn active px-6 py-2 rounded-full text-xs font-black whitespace-nowrap bg-white shadow-sm transition-all">TẤT CẢ</button>
-                        <button onclick="filterMenu('Drink')" class="tab-btn px-6 py-2 rounded-full text-xs font-black whitespace-nowrap bg-white shadow-sm transition-all">ĐỒ UỐNG</button>
-                        <button onclick="filterMenu('Food')" class="tab-btn px-6 py-2 rounded-full text-xs font-black whitespace-nowrap bg-white shadow-sm transition-all">THỨC ĂN</button>
-                        <button onclick="filterMenu('Extra')" class="tab-btn px-6 py-2 rounded-full text-xs font-black whitespace-nowrap bg-white shadow-sm transition-all">KHÁC</button>
+                        <button onclick="filterMenu('All')" class="tab-btn active px-6 py-2 rounded-full text-xs font-black bg-white shadow-sm">TẤT CẢ</button>
+                        <button onclick="filterMenu('Drink')" class="tab-btn px-6 py-2 rounded-full text-xs font-black bg-white shadow-sm">ĐỒ UỐNG</button>
+                        <button onclick="filterMenu('Food')" class="tab-btn px-6 py-2 rounded-full text-xs font-black bg-white shadow-sm">THỨC ĂN</button>
                     </div>
                     <div class="flex-1 overflow-y-auto p-6 no-scrollbar grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="menu-list"></div>
                 </div>
-                
-                <!-- Cart side -->
                 <div class="w-96 border-l bg-white p-6 flex flex-col">
                     <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Danh sách món tại bàn</h5>
                     <div id="cart-list" class="flex-1 overflow-y-auto space-y-3 no-scrollbar pr-2"></div>
-                    
                     <div class="pt-6 border-t mt-6">
-                        <div class="flex justify-between items-end mb-6">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Tổng thanh toán</span>
-                            <span id="cart-total" class="text-2xl font-black text-slate-900">0đ</span>
-                        </div>
+                        <div class="flex justify-between items-end mb-6"><span class="text-xs font-bold text-slate-400">Tổng thanh toán</span><span id="cart-total" class="text-2xl font-black text-slate-900">0đ</span></div>
                         <div class="space-y-2">
-                            <button id="btn-save-order" onclick="saveOrder()" class="staff-only w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-sm active-scale hover:bg-black transition-all">GỬI ORDER / CẬP NHẬT</button>
-                            <button id="btn-request-pay" onclick="updateStatus('pending-pay')" class="staff-only w-full bg-amber-500 text-white py-4 rounded-2xl font-black text-sm hidden active-scale disabled:opacity-50">YÊU CẦU THANH TOÁN</button>
-                            
-                            <!-- Admin Buttons -->
+                            <button id="btn-save-order" onclick="saveOrder()" class="staff-only w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-sm active-scale">GỬI ORDER / CẬP NHẬT</button>
+                            <button id="btn-request-pay" onclick="updateStatus('pending-pay')" class="staff-only w-full bg-amber-500 text-white py-4 rounded-2xl font-black text-sm hidden active-scale">YÊU CẦU THANH TOÁN</button>
                             <button id="btn-admin-save" onclick="saveOrder()" class="admin-only w-full border-2 border-slate-900 text-slate-900 py-3 rounded-2xl font-black text-sm mb-2 hidden active-scale">LƯU THAY ĐỔI (ADMIN)</button>
-                            <button id="btn-pay" onclick="handlePayment()" class="admin-only w-full bg-emerald-600 text-white py-4 rounded-2xl font-black text-sm hidden active-scale hover:bg-emerald-700 transition-all disabled:opacity-50">XÁC NHẬN THANH TOÁN</button>
+                            <button id="btn-pay" onclick="handlePayment()" class="admin-only w-full bg-emerald-600 text-white py-4 rounded-2xl font-black text-sm hidden active-scale">XÁC NHẬN THANH TOÁN</button>
                         </div>
                     </div>
                 </div>
@@ -185,7 +163,7 @@
         </div>
     </div>
 
-    <!-- TOAST NOTIFICATION -->
+    <!-- TOAST -->
     <div id="toast" class="fixed top-10 left-1/2 -translate-x-1/2 bg-indigo-600 text-white px-10 py-5 rounded-[2rem] text-sm font-black tracking-widest shadow-2xl translate-y-[-200%] transition-all z-[3000] flex items-center gap-3">
         <svg id="toast-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
         <span id="toast-msg">THÔNG BÁO</span>
@@ -194,119 +172,82 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, collection, onSnapshot, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'respro-v3-stable-sync';
-    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-    const initialToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    // ================================================================
+    // THAY CẤU HÌNH FIREBASE CỦA BẠN TẠI ĐÂY (Lấy từ Firebase Console)
+    // ================================================================
+    const firebaseConfig = {
+      apiKey: "CHÈN_API_KEY_CỦA_BẠN",
+      authDomain: "PROJECT_ID.firebaseapp.com",
+      projectId: "PROJECT_ID",
+      storageBucket: "PROJECT_ID.firebasestorage.app",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+    // ================================================================
 
-    let db = null;
-    let auth = null;
-    let tables = [];
-    let history = [];
-    let currentCategory = 'All';
+    const appId = 'my-respro-production-v1'; // Bạn có thể đổi tên tùy ý
+    let db, auth, authUser, currentUser, tables = [], history = [], currentCart = [], activeTableId, activeTableName, currentCategory = 'All';
 
     let menu = [
         { id: 'm1', name: "Cà phê Sữa đá", price: 29000, category: 'Drink' },
         { id: 'm2', name: "Bạc xỉu", price: 35000, category: 'Drink' },
         { id: 'm3', name: "Trà đào cam sả", price: 45000, category: 'Drink' },
         { id: 'm4', name: "Bánh mì Hội An", price: 35000, category: 'Food' },
-        { id: 'm5', name: "Trà sữa Matcha", price: 42000, category: 'Drink' },
-        { id: 'm6', name: "Nước ép Cam", price: 38000, category: 'Drink' },
         { id: 'm7', name: "Cơm chiên Dương Châu", price: 55000, category: 'Food' },
-        { id: 'm8', name: "Khăn lạnh", price: 3000, category: 'Extra' },
-        { id: 'm9', name: "Bia Heineken", price: 25000, category: 'Extra' }
+        { id: 'm8', name: "Khăn lạnh", price: 3000, category: 'Extra' }
     ];
-
-    let currentUser = null;
-    let currentCart = [];
-    let activeTableId = null;
-    let activeTableName = "";
-    let isConnected = false;
-    let authUser = null;
 
     const init = async () => {
         updateDate();
-        if (firebaseConfig) {
-            try {
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                
-                const initAuth = async () => {
-                    if (initialToken) await signInWithCustomToken(auth, initialToken);
-                    else await signInAnonymously(auth);
-                };
-                
-                await initAuth();
-                onAuthStateChanged(auth, (user) => {
-                    authUser = user;
-                    if (user) startRealtimeListeners();
-                });
-            } catch (e) { console.error(e); useOfflineMode(); }
-        } else { useOfflineMode(); }
-        setTimeout(() => { if (!isConnected) useOfflineMode(); }, 8000);
+        try {
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            await signInAnonymously(auth); // Quan trọng: Phải bật Anonymous Auth trong Firebase
+            onAuthStateChanged(auth, (user) => {
+                if (user) { authUser = user; startRealtimeListeners(); }
+            });
+        } catch (e) { 
+            console.error("Firebase Error:", e); 
+            document.getElementById('online-status').innerText = "○ Lỗi cấu hình Firebase";
+            document.getElementById('online-status').className = "text-[10px] text-red-500 font-bold uppercase";
+            hideLoading();
+        }
     };
 
     const startRealtimeListeners = () => {
         const tableColl = collection(db, 'artifacts', appId, 'public', 'data', 'tables');
         onSnapshot(tableColl, (snap) => {
-            isConnected = true;
             if (!snap.empty) {
                 tables = snap.docs.map(d => ({ id: d.id, ...d.data() }));
             } else { seedDatabase(); }
             renderTables();
             updateStats();
-            document.getElementById('online-status').innerText = "● Trực tuyến (Đã kết nối)";
-            document.getElementById('online-status').className = "text-[10px] text-emerald-500 font-bold uppercase tracking-widest";
+            document.getElementById('online-status').innerText = "● Trực tuyến (Firebase OK)";
+            document.getElementById('online-status').className = "text-[10px] text-emerald-500 font-bold uppercase";
             hideLoading();
-            
             if(activeTableId) {
-                const updatedTable = tables.find(t => t.id === activeTableId);
-                if(updatedTable) updateLockState(updatedTable);
+                const ut = tables.find(t => t.id === activeTableId);
+                if(ut) updateLockState(ut);
             }
-        }, (err) => { console.error(err); });
+        }, (err) => { 
+            console.error("Firestore Permission Error:", err);
+            showToast("Lỗi quyền truy cập Firestore!", true);
+        });
 
-        const historyColl = collection(db, 'artifacts', appId, 'public', 'data', 'history');
-        onSnapshot(historyColl, (snap) => {
+        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'history'), (snap) => {
             history = snap.docs.map(d => d.data());
             updateStats();
-        }, (err) => console.error(err));
+        });
     };
 
-    const useOfflineMode = () => {
-        isConnected = true;
-        document.getElementById('online-status').innerText = "○ Offline Mode (Lỗi kết nối)";
-        document.getElementById('online-status').className = "text-[10px] text-red-400 font-bold uppercase tracking-widest";
-        hideLoading();
-    };
-
-    const hideLoading = () => {
-        const loader = document.getElementById('loading-overlay');
-        if (loader) loader.classList.add('opacity-0', 'pointer-events-none');
-    };
-
-    window.handleLogin = () => {
-        const pin = document.getElementById('pin-input').value;
-        if (pin === '123456') setRole('Quản lý Minh', 'ADMIN');
-        else if (pin === '111111') setRole('Nhân viên Tú', 'STAFF');
-        else showToast("Mã PIN không đúng!", true);
-    };
-
-    const setRole = (name, role) => {
-        currentUser = { name, role };
-        document.getElementById('login-screen').classList.add('opacity-0', 'pointer-events-none');
-        document.getElementById('user-display-name').innerText = name;
-        document.getElementById('user-display-name').classList.remove('text-slate-400');
-        const badge = document.getElementById('role-badge');
-        badge.innerText = role === 'ADMIN' ? 'QUẢN LÝ' : 'NHÂN VIÊN';
-        const appEl = document.getElementById('app');
-        appEl.classList.remove('is-admin', 'is-staff');
-        appEl.classList.add(role === 'ADMIN' ? 'is-admin' : 'is-staff');
-        renderTables();
-        renderMenu();
-        updateStats();
+    const seedDatabase = async () => {
+        for(let i=1; i<=12; i++) {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', i.toString()), { name: `Bàn ${i}`, status: 'empty', currentOrder: [] });
+        }
     };
 
     const renderTables = () => {
@@ -314,236 +255,108 @@
         if (!grid) return;
         grid.innerHTML = '';
         tables.sort((a,b) => parseInt(a.id) - parseInt(b.id)).forEach(t => {
+            const val = (t.currentOrder || []).reduce((acc, i) => acc + (i.price * i.qty), 0);
             const div = document.createElement('div');
-            const totalVal = (t.currentOrder || []).reduce((acc, i) => acc + (i.price * (i.qty || 1)), 0);
             div.className = `table-card p-5 rounded-[2.5rem] flex flex-col items-center justify-center gap-2 status-${t.status || 'empty'}`;
-            div.innerHTML = `
-                <div class="w-12 h-12 rounded-2xl bg-slate-50/50 flex items-center justify-center font-black text-slate-800">${t.id.padStart(2, '0')}</div>
-                <div class="text-center">
-                    <p class="text-[10px] font-black uppercase">${t.name || ('Bàn ' + t.id)}</p>
-                    <p class="text-[9px] font-black">${t.status === 'empty' ? 'TRỐNG' : totalVal.toLocaleString() + 'đ'}</p>
-                </div>
-            `;
+            div.innerHTML = `<div class="w-12 h-12 rounded-2xl bg-slate-50/50 flex items-center justify-center font-black text-slate-800">${t.id.padStart(2, '0')}</div><div class="text-center"><p class="text-[10px] font-black uppercase">${t.name}</p><p class="text-[9px] font-black">${t.status === 'empty' ? 'TRỐNG' : val.toLocaleString() + 'đ'}</p></div>`;
             div.onclick = () => openTable(t);
             grid.appendChild(div);
         });
     };
 
-    const updateStats = () => {
-        const revenueEl = document.getElementById('stat-revenue');
-        if (!revenueEl) return;
-        let totalRev = history.reduce((sum, h) => sum + (h.totalAmount || 0), 0);
-        let busyCount = tables.filter(t => t.status !== 'empty').length;
-        let pendingCount = tables.filter(t => t.status === 'pending-pay').length;
-        revenueEl.innerText = totalRev.toLocaleString() + 'đ';
-        document.getElementById('stat-tables').innerText = `${busyCount}/12`;
-        document.getElementById('stat-pending').innerText = pendingCount;
-    };
-
-    const openTable = (table) => {
-        activeTableId = table.id;
-        activeTableName = table.name || `Bàn ${table.id}`;
-        currentCart = JSON.parse(JSON.stringify(table.currentOrder || []));
-        
-        document.getElementById('modal-table-num').innerText = table.id.padStart(2, '0');
-        document.getElementById('modal-table-name').innerText = activeTableName;
+    const openTable = (t) => {
+        activeTableId = t.id; activeTableName = t.name;
+        currentCart = JSON.parse(JSON.stringify(t.currentOrder || []));
+        document.getElementById('modal-table-num').innerText = t.id.padStart(2, '0');
+        document.getElementById('modal-table-name').innerText = t.name;
         document.getElementById('order-modal').classList.remove('hidden');
-        
-        updateLockState(table);
+        updateLockState(t);
         updateCartUI();
     };
 
-    const updateLockState = (table) => {
-        const isBusy = table.status === 'busy';
-        const isPending = table.status === 'pending-pay';
-        const hasItems = currentCart.length > 0;
-        const isAdmin = currentUser && currentUser.role === 'ADMIN';
-
-        // 1. Quản lý lớp phủ khóa (Overlay)
-        // Chỉ hiện khóa cho Nhân viên khi bàn đang ở trạng thái pending-pay
-        const lockOverlay = document.getElementById('lock-overlay');
-        if (isPending && !isAdmin) {
-            lockOverlay.classList.remove('hidden');
-        } else {
-            lockOverlay.classList.add('hidden');
-        }
-
-        // 2. Logic Nút Mở Khóa (ADMIN ONLY)
-        // Chỉ HIỆN khi trạng thái là pending-pay và là Admin. Tự động ẩn khi unlock thành công.
-        const btnUnlock = document.getElementById('btn-unlock');
-        if (isPending && isAdmin) {
-            btnUnlock.classList.remove('hidden');
-            btnUnlock.disabled = false;
-        } else {
-            btnUnlock.classList.add('hidden');
-            btnUnlock.disabled = true;
-        }
-
-        // 3. Logic các nút chức năng khác
-        document.getElementById('btn-request-pay').classList.toggle('hidden', !isBusy);
-        document.getElementById('btn-pay').classList.toggle('hidden', !(isBusy || isPending));
-        document.getElementById('btn-admin-save').classList.toggle('hidden', !(isBusy || isPending));
-        
-        // Vô hiệu hóa nút Gửi Order của nhân viên nếu bàn bị khóa
+    const updateLockState = (t) => {
+        const isPending = t.status === 'pending-pay';
+        const isAdmin = currentUser?.role === 'ADMIN';
+        document.getElementById('lock-overlay').classList.toggle('hidden', !(isPending && !isAdmin));
+        document.getElementById('btn-unlock').classList.toggle('hidden', !(isPending && isAdmin));
         document.getElementById('btn-save-order').disabled = isPending;
-
-        // Vô hiệu hóa nút tính tiền nếu giỏ hàng trống
-        document.getElementById('btn-request-pay').disabled = !hasItems;
-        document.getElementById('btn-pay').disabled = !hasItems;
-
-        document.getElementById('modal-table-status').innerText = isPending ? 'CHỜ THANH TOÁN (KHOÁ)' : (isBusy ? 'ĐANG CÓ KHÁCH' : 'BÀN TRỐNG');
+        document.getElementById('btn-request-pay').classList.toggle('hidden', t.status !== 'busy');
+        document.getElementById('btn-pay').classList.toggle('hidden', !isPending && t.status !== 'busy');
+        document.getElementById('btn-admin-save').classList.toggle('hidden', !isAdmin || t.status === 'empty');
+        document.getElementById('modal-table-status').innerText = isPending ? 'CHỜ THANH TOÁN (KHOÁ)' : (t.status === 'busy' ? 'ĐANG CÓ KHÁCH' : 'BÀN TRỐNG');
         renderMenu();
     };
 
-    window.unlockTable = async () => {
-        if(!activeTableId || !authUser) return;
-        try {
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), { status: 'busy' });
-            showToast("ĐÃ MỞ KHOÁ BÀN!");
-            // Không cần đóng modal, giao diện sẽ tự cập nhật nhờ onSnapshot
-        } catch(e) { showToast("LỖI MỞ KHOÁ", true); }
-    };
-
-    window.filterMenu = (cat) => {
-        currentCategory = cat;
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.innerText.includes(cat === 'All' ? 'TẤT CẢ' : (cat === 'Drink' ? 'ĐỒ UỐNG' : (cat === 'Food' ? 'THỨC ĂN' : 'KHÁC'))));
-        });
-        renderMenu();
-    };
-
-    const renderMenu = () => {
-        const list = document.getElementById('menu-list');
-        list.innerHTML = '';
-        const table = tables.find(t => t.id === activeTableId);
-        const isLocked = table && table.status === 'pending-pay';
-        const isStaff = currentUser && currentUser.role === 'STAFF';
-        
-        const filtered = currentCategory === 'All' ? menu : menu.filter(m => m.category === currentCategory);
-
-        filtered.forEach(m => {
+    const updateCartUI = () => {
+        const list = document.getElementById('cart-list'); list.innerHTML = '';
+        const t = tables.find(x => x.id === activeTableId);
+        const canEdit = currentUser && (currentUser.role === 'ADMIN' || (currentUser.role === 'STAFF' && t.status !== 'pending-pay'));
+        currentCart.forEach((item, idx) => {
             const div = document.createElement('div');
-            const canClick = isStaff ? !isLocked : true; // Admin luôn click được
-            div.className = `bg-white p-5 rounded-[2rem] border border-slate-100 flex items-center justify-between ${canClick ? 'cursor-pointer active-scale hover:border-indigo-200' : 'opacity-40 cursor-not-allowed'}`;
-            div.innerHTML = `<div class="flex items-center gap-4"><div class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-indigo-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><p class="font-black text-xs text-slate-800">${m.name}</p><p class="text-[10px] text-indigo-600 font-extrabold uppercase">${m.price.toLocaleString()}đ</p></div></div>`;
-            if (canClick) div.onclick = () => {
-                const exist = currentCart.find(i => i.id === m.id);
-                if(exist) exist.qty++; else currentCart.push({ ...m, qty: 1 });
+            div.className = "flex items-center justify-between p-4 bg-slate-50 rounded-[1.5rem]";
+            div.innerHTML = `<div class="flex-1"><p class="text-[10px] font-black text-slate-700">${item.name}</p><p class="text-[9px] text-slate-400 font-bold">${(item.price * item.qty).toLocaleString()}đ</p></div><div class="flex items-center gap-3">${canEdit ? `<button onclick="window.updateQty(${idx}, -1)" class="w-8 h-8 bg-white rounded-xl shadow-sm">-</button>` : ''}<span class="text-xs font-black">${item.qty}</span>${canEdit ? `<button onclick="window.updateQty(${idx}, 1)" class="w-8 h-8 bg-white rounded-xl shadow-sm">+</button>` : ''}</div>`;
+            list.appendChild(div);
+        });
+        document.getElementById('cart-total').innerText = currentCart.reduce((a, b) => a + (b.price * b.qty), 0).toLocaleString() + 'đ';
+    };
+
+    window.updateQty = (idx, d) => { currentCart[idx].qty += d; if(currentCart[idx].qty <= 0) currentCart.splice(idx, 1); updateCartUI(); };
+    window.saveOrder = async () => {
+        if(!activeTableId) return;
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), { status: currentCart.length > 0 ? 'busy' : 'empty', currentOrder: currentCart, name: activeTableName }, { merge: true });
+        closeModal(); showToast("ĐÃ LƯU ORDER");
+    };
+    window.updateStatus = async (s) => { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), { status: s }); closeModal(); showToast("ĐÃ GỬI YÊU CẦU"); };
+    window.unlockTable = async () => { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), { status: 'busy' }); showToast("ĐÃ MỞ KHÓA"); };
+    window.handlePayment = async () => {
+        const total = currentCart.reduce((a, b) => a + (b.price * b.qty), 0);
+        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'history'), { tableName: activeTableName, totalAmount: total, timestamp: new Date().toISOString(), staff: currentUser.name });
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), { status: 'empty', currentOrder: [], name: activeTableName });
+        closeModal(); showToast("THANH TOÁN XONG!");
+    };
+
+    window.handleLogin = () => {
+        const pin = document.getElementById('pin-input').value;
+        if (pin === '123456') setRole('Quản lý Minh', 'ADMIN');
+        else if (pin === '111111') setRole('Nhân viên Tú', 'STAFF');
+        else showToast("Mã PIN sai!", true);
+    };
+    const setRole = (n, r) => {
+        currentUser = { n, role: r };
+        document.getElementById('login-screen').classList.add('opacity-0', 'pointer-events-none');
+        document.getElementById('user-display-name').innerText = n;
+        document.getElementById('role-badge').innerText = r;
+        document.getElementById('app').className = `max-w-7xl mx-auto h-screen shadow-2xl bg-white flex flex-col relative overflow-hidden is-${r.toLowerCase()}`;
+        renderTables(); renderMenu();
+    };
+    window.filterMenu = (c) => { currentCategory = c; renderMenu(); };
+    const renderMenu = () => {
+        const list = document.getElementById('menu-list'); list.innerHTML = '';
+        const t = tables.find(x => x.id === activeTableId);
+        const locked = t?.status === 'pending-pay' && currentUser?.role === 'STAFF';
+        menu.filter(m => currentCategory === 'All' || m.category === currentCategory).forEach(m => {
+            const div = document.createElement('div');
+            div.className = `bg-white p-5 rounded-[2rem] border border-slate-100 flex items-center justify-between ${locked ? 'opacity-40' : 'cursor-pointer active-scale'}`;
+            div.innerHTML = `<div><p class="font-black text-xs">${m.name}</p><p class="text-[10px] text-indigo-600 font-extrabold">${m.price.toLocaleString()}đ</p></div>`;
+            if(!locked) div.onclick = () => {
+                const ex = currentCart.find(i => i.id === m.id);
+                if(ex) ex.qty++; else currentCart.push({...m, qty: 1});
                 updateCartUI();
             };
             list.appendChild(div);
         });
     };
 
-    const updateCartUI = () => {
-        const list = document.getElementById('cart-list');
-        list.innerHTML = '';
-        const table = tables.find(t => t.id === activeTableId);
-        const isLocked = table && table.status === 'pending-pay';
-        const canEdit = currentUser && (currentUser.role === 'ADMIN' || (currentUser.role === 'STAFF' && !isLocked));
-        
-        currentCart.forEach((item, idx) => {
-            const div = document.createElement('div');
-            div.className = "flex items-center justify-between p-4 bg-slate-50 rounded-[1.5rem] border border-transparent";
-            div.innerHTML = `<div class="flex-1"><p class="text-[10px] font-black text-slate-700">${item.name}</p><p class="text-[9px] text-slate-400 font-bold">${(item.price * item.qty).toLocaleString()}đ</p></div><div class="flex items-center gap-3">${canEdit ? `<button onclick="window.updateQty(${idx}, -1)" class="w-8 h-8 bg-white rounded-xl flex items-center justify-center font-black text-slate-400 shadow-sm active-scale">-</button>` : ''}<span class="text-xs font-black w-4 text-center">${item.qty}</span>${canEdit ? `<button onclick="window.updateQty(${idx}, 1)" class="w-8 h-8 bg-white rounded-xl flex items-center justify-center font-black text-slate-400 shadow-sm active-scale">+</button>` : ''}</div>`;
-            list.appendChild(div);
-        });
-        
-        const total = currentCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-        document.getElementById('cart-total').innerText = total.toLocaleString() + 'đ';
-        
-        const hasItems = currentCart.length > 0;
-        const btnReq = document.getElementById('btn-request-pay');
-        const btnPay = document.getElementById('btn-pay');
-        if(btnReq) btnReq.disabled = !hasItems;
-        if(btnPay) btnPay.disabled = !hasItems;
-    };
-
-    window.updateQty = (idx, delta) => {
-        currentCart[idx].qty += delta;
-        if(currentCart[idx].qty <= 0) currentCart.splice(idx, 1);
-        updateCartUI();
-    };
-
-    window.saveOrder = async () => {
-        if(!activeTableId || !authUser) return;
-        const newStatus = currentCart.length > 0 ? 'busy' : 'empty';
-        try {
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), {
-                status: newStatus,
-                currentOrder: currentCart,
-                name: activeTableName 
-            }, { merge: true });
-            showToast("ĐÃ CẬP NHẬT DỮ LIỆU BÀN!");
-            closeModal();
-        } catch (e) { showToast("LỖI GHI DỮ LIỆU", true); }
-    };
-
-    window.updateStatus = async (status) => {
-        if(currentCart.length === 0) return;
-        try {
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), { status });
-            showToast("ĐÃ GỬI YÊU CẦU THANH TOÁN!");
-            closeModal();
-        } catch (e) { showToast("LỖI CẬP NHẬT", true); }
-    };
-
-    window.handlePayment = async () => {
-        if(!activeTableId || !authUser) return;
-        const totalAmount = currentCart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-        if(totalAmount <= 0) { showToast("KHÔNG CÓ MÓN ĐỂ THANH TOÁN", true); return; }
-        
-        try {
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'history'), {
-                tableId: activeTableId,
-                tableName: activeTableName,
-                totalAmount: totalAmount,
-                items: currentCart,
-                timestamp: new Date().toISOString(),
-                staff: currentUser.name
-            });
-
-            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', activeTableId), {
-                status: 'empty',
-                currentOrder: [],
-                name: activeTableName
-            });
-
-            showToast("THANH TOÁN THÀNH CÔNG!");
-            closeModal();
-        } catch(e) { showToast("LỖI THANH TOÁN", true); }
-    };
-
-    window.closeModal = () => {
-        activeTableId = null;
-        document.getElementById('order-modal').classList.add('hidden');
-    }
+    window.closeModal = () => { activeTableId = null; document.getElementById('order-modal').classList.add('hidden'); };
     window.logout = () => location.reload();
-    
-    const showToast = (msg, isError = false) => {
+    const showToast = (m, e = false) => {
         const t = document.getElementById('toast');
-        const m = document.getElementById('toast-msg');
-        const icon = document.getElementById('toast-icon');
-        m.innerText = msg;
-        t.className = `fixed top-10 left-1/2 -translate-x-1/2 px-10 py-5 rounded-[2rem] text-sm font-black tracking-widest shadow-2xl transition-all z-[3000] flex items-center gap-3 ${isError ? 'bg-red-500 text-white' : 'bg-emerald-600 text-white'}`;
-        icon.innerHTML = isError ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>';
+        document.getElementById('toast-msg').innerText = m;
         t.style.transform = 'translate(-50%, 0)';
         setTimeout(() => t.style.transform = 'translate(-50%, -200%)', 3000);
     };
-
+    const hideLoading = () => document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
     const updateDate = () => document.getElementById('date-display').innerText = new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long' });
-    const seedDatabase = async () => {
-        if(!db || !authUser) return;
-        try {
-            for(let i=1; i<=12; i++) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', i.toString()), { name: `Bàn ${i}`, status: 'empty', currentOrder: [] });
-            }
-        } catch(e) { console.warn(e); }
-    };
-    setInterval(() => {
-        const clock = document.getElementById('clock-display');
-        if(clock) clock.innerText = new Date().toLocaleTimeString('vi-VN');
-    }, 1000);
     init();
 </script>
 </body>
